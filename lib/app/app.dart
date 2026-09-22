@@ -6,8 +6,13 @@ import '../features/shell/shell_screen.dart';
 import 'app_controller.dart';
 
 class SpaceMatchApp extends StatelessWidget {
-  const SpaceMatchApp({super.key, required this.controller});
+  const SpaceMatchApp({
+    super.key,
+    required this.controller,
+    this.isDemo = true,
+  });
   final AppController controller;
+  final bool isDemo;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,7 @@ class SpaceMatchApp extends StatelessWidget {
       home: AnimatedBuilder(
         animation: controller,
         builder: (context, _) => controller.isAuthenticated
-            ? ShellScreen(controller: controller)
+            ? ShellScreen(controller: controller, isDemo: isDemo)
             : AuthScreen(controller: controller),
       ),
     );
@@ -26,35 +31,44 @@ class SpaceMatchApp extends StatelessWidget {
 }
 
 class SpaceLogo extends StatelessWidget {
-  const SpaceLogo({super.key, this.compact = false});
+  const SpaceLogo({super.key, this.compact = false, this.wrap = false});
   final bool compact;
+  final bool wrap;
 
   @override
   Widget build(BuildContext context) {
+    final children = <Widget>[
+      Container(
+        width: compact ? 38 : 56,
+        height: compact ? 38 : 56,
+        decoration: BoxDecoration(
+          color: SpaceColors.sand.withValues(alpha: .14),
+          borderRadius: BorderRadius.circular(compact ? 13 : 19),
+          border: Border.all(color: SpaceColors.sand.withValues(alpha: .35)),
+        ),
+        child: Icon(
+          Icons.auto_awesome,
+          color: SpaceColors.sand,
+          size: compact ? 20 : 27,
+        ),
+      ),
+      Text(
+        'SpaceMatch',
+        style: Theme.of(context).textTheme.headlineMedium
+            ?.copyWith(color: SpaceColors.sand),
+      ),
+    ];
+    if (wrap) {
+      return Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: children,
+      );
+    }
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: compact ? 38 : 56,
-          height: compact ? 38 : 56,
-          decoration: BoxDecoration(
-            color: SpaceColors.sand.withValues(alpha: .14),
-            borderRadius: BorderRadius.circular(compact ? 13 : 19),
-            border: Border.all(color: SpaceColors.sand.withValues(alpha: .35)),
-          ),
-          child: Icon(
-            Icons.auto_awesome,
-            color: SpaceColors.sand,
-            size: compact ? 20 : 27,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          'SpaceMatch',
-          style: Theme.of(context).textTheme.headlineMedium
-              ?.copyWith(color: SpaceColors.sand),
-        ),
-      ],
+      children: [children[0], const SizedBox(width: 12), children[1]],
     );
   }
 }

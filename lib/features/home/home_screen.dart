@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app.dart';
 import '../../app/app_controller.dart';
 import '../../core/design/space_theme.dart';
+import '../about/about_screen.dart';
 import '../dna/dna_screen.dart';
 import '../projects/projects_screen.dart';
 
@@ -11,9 +12,11 @@ class HomeScreen extends StatelessWidget {
     super.key,
     required this.controller,
     required this.openTab,
+    this.isDemo = true,
   });
   final AppController controller;
   final ValueChanged<int> openTab;
+  final bool isDemo;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,8 @@ class HomeScreen extends StatelessWidget {
                   tooltip: 'Conta',
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (_) => AccountScreen(controller: controller),
+                      builder: (_) =>
+                          AccountScreen(controller: controller, isDemo: isDemo),
                     ),
                   ),
                   icon: const Icon(Icons.person_outline),
@@ -178,8 +182,13 @@ class HomeScreen extends StatelessWidget {
 }
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({super.key, required this.controller});
+  const AccountScreen({
+    super.key,
+    required this.controller,
+    this.isDemo = true,
+  });
   final AppController controller;
+  final bool isDemo;
 
   @override
   Widget build(BuildContext context) {
@@ -197,6 +206,50 @@ class AccountScreen extends StatelessWidget {
                 leading: const CircleAvatar(child: Icon(Icons.person_outline)),
                 title: Text(controller.email ?? ''),
                 subtitle: const Text('Conta local de demonstração'),
+              ),
+            ),
+            const SizedBox(height: 18),
+            Semantics(
+              button: true,
+              child: SpaceCard(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    settings: const RouteSettings(name: '/about'),
+                    builder: (_) => AboutScreen(isDemo: isDemo),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const ExcludeSemantics(
+                      child: Icon(
+                        Icons.info_outline,
+                        size: 24,
+                        color: SpaceColors.sand,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Sobre o app',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Conheça o SpaceMatch',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const ExcludeSemantics(
+                      child: Icon(Icons.chevron_right, color: SpaceColors.sand),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 18),

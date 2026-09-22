@@ -12,5 +12,5 @@ Future<void> main() async {
     generator: const DemoGenerationService(delay: Duration(milliseconds: 900)),
   );
   await controller.initialize();
-  runApp(SpaceMatchApp(controller: controller));
+  runApp(SpaceMatchApp(controller: controller, isDemo: true));
 }

@@ -5,8 +5,9 @@ import '../../core/design/space_theme.dart';
 import 'mvp_screens.dart';
 
 class ShellScreen extends StatefulWidget {
-  const ShellScreen({super.key, required this.controller});
+  const ShellScreen({super.key, required this.controller, this.isDemo = true});
   final AppController controller;
+  final bool isDemo;
 
   @override
   State<ShellScreen> createState() => _ShellScreenState();
@@ -20,6 +21,7 @@ class _ShellScreenState extends State<ShellScreen> {
     final pages = [
       HomeScreen(
         controller: widget.controller,
+        isDemo: widget.isDemo,
         openTab: (value) => setState(() => index = value),
       ),
       MatchScreen(controller: widget.controller),
